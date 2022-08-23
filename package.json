@@ -1,0 +1,25 @@
+{
+  "name": "timewise-photos",
+  "version": "1.0.0",
+  "description": "Organize photos into year-month subfolders.",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "yarn build && node build/index.js -p \"../src/__test__/res\"",
+    "build": "tsc",
+    "serve": "node build/index.js",
+    "start": "yarn build && yarn serve"
+  },
+  "author": "Azraf Taohid",
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/node": "^14.14.31",
+    "@types/yargs": "^17.0.11",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
+    "eslint": "latest",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "2.7.1",
+    "typescript": "^4.7.4",
+    "yargs": "^17.5.1"
+  }
+}
