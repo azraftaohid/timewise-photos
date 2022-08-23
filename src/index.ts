@@ -1,4 +1,6 @@
+import stdFs from "fs";
 import fs from "fs/promises";
+import { nanoid } from "nanoid";
 import path from "path";
 import { hideBin } from "yargs/helpers";
 import yargs from "yargs/yargs";
@@ -9,7 +11,8 @@ const args = yargs(hideBin(process.argv))
 
 async function start() {
     const { path: p = "./" } = await args;
-
+    
+    const now = new Date();
     const root = path.resolve(__dirname, p);
     console.log(`timewising photos in ${root}`);
 
@@ -19,6 +22,12 @@ async function start() {
     const files = await fs.readdir(root);
     console.log(`files found: ${files.length}`);
 
+    const logFile = path.resolve(root, `timewise_photos-${now.getTime() / 1000 | 0}-${nanoid(12)}.txt`);
+    const log = stdFs.createWriteStream(logFile, { flags: "a" });
+
+    log.write(`time: ${now.toISOString()}\n`);
+    log.write(`root: ${root}\n`);
+
     let success = 0;
 
     process.stdout.write(`making draft...\r`);
@@ -26,7 +35,7 @@ async function start() {
         const fPath = path.resolve(root, fName);
         try {
             const stats = await fs.lstat(fPath);
-            if (!stats.isFile() || stats.isSymbolicLink()) return;
+            if (!stats.isFile() || stats.isSymbolicLink()) continue;
 
             const { mtime, ctime } = stats;
             const createTime = mtime < ctime ? mtime : ctime;
@@ -35,6 +44,7 @@ async function start() {
             drafts.set(fPath, path.resolve(root, folder, fName));
         } catch (err) {
             errors.set(fPath, `${err}`);
+            log.write(`err: ${fPath} => ${err}\n`);
         }
     }
 
@@ -46,21 +56,19 @@ async function start() {
         try {
             await fs.mkdir(dest.substring(0, dest.lastIndexOf(path.sep)), { recursive: true }).catch(() => { /* no-op */ });
             await fs.rename(src, dest);
+
+            log.write(`move: ${src} => ${dest}\n`);
             success++;
         } catch (err) {
+            log.write(`err: ${src} => ${err}\n`);
             errors.set(src, `${err}`);
         }
         
-        process.stdout.write(`\r${makeProgressMessage(success, errors.size, size)}`);
+        process.stdout.write(makeProgressMessage(success, errors.size, size));
     }
 
-    if (errors.size) {
-        console.log(`\nerrors: `);
-        for (const [src, err] of errors) {
-            console.error(`${src}: ${err}`);
-        }
-    }
-
+    log.end();
+    console.log(`\ncheck logs: ${logFile}`);
     console.log(`\noperation completed.`);
 }
 

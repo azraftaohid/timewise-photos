@@ -938,6 +938,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nanoid@npm:3.3.4":
+  version: 3.3.4
+  resolution: "nanoid@npm:3.3.4"
+  bin:
+    nanoid: bin/nanoid.cjs
+  checksum: 2fddd6dee994b7676f008d3ffa4ab16035a754f4bb586c61df5a22cf8c8c94017aadd360368f47d653829e0569a92b129979152ff97af23a558331e47e37cd9c
+  languageName: node
+  linkType: hard
+
 "natural-compare@npm:^1.4.0":
   version: 1.4.0
   resolution: "natural-compare@npm:1.4.0"
@@ -1196,6 +1205,7 @@ __metadata:
     "@typescript-eslint/parser": latest
     eslint: latest
     eslint-config-prettier: ^8.5.0
+    nanoid: 3.3.4
     prettier: 2.7.1
     typescript: ^4.7.4
     yargs: ^17.5.1
