@@ -2,19 +2,12 @@
  Organize photos into year-month subfolders.
 
 ## Usage
-Step 1: initialize the project.
+From CLI:
 ```bash
-yarn
+timewise [-p "path/to/folder"]
 ```
 
-Step 2: build the script using this command:
-```bash
-yarn build
-```
-
-Step 3: run the script.
-```bash
-node build/index.js -p "path/to/your/folder"
-```
-
-For subsequent runs, skip step 1 and step 2.
+## Install
+1. Clone this project on your machine.
+1. Open the root folder in terminal.
+1. Run the command: `npm link`.

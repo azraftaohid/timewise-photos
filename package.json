@@ -1,15 +1,19 @@
 {
   "name": "timewise-photos",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Organize photos into year-month subfolders.",
   "main": "build/index.js",
   "scripts": {
-    "test": "yarn build && node build/index.js -p \"../src/__test__/res\"",
+    "test": "yarn build && node build/cli.js -p \"src/__test__/res\"",
     "build": "tsc",
     "serve": "node build/index.js",
     "start": "yarn build && yarn serve"
   },
-  "author": "Azraf Taohid",
+  "author": {
+    "name": "Azraf Taohid",
+    "email": "azraftaohid@outlook.com",
+    "url": "https://github.com/azraftaohid"
+  },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.1",
     "@types/node": "^14.14.31",
@@ -24,5 +28,10 @@
   },
   "dependencies": {
     "nanoid": "3.3.4"
-  }
+  },
+  "bin": {
+    "timewise": "build/cli.js",
+    "timewise-photos": "build/cli.js"
+  },
+  "preferGlobal": true
 }
