@@ -3,7 +3,7 @@ import fs from "fs/promises";
 import { nanoid } from "nanoid";
 import path from "path";
 
-export async function timewise(dir = "./") {
+export async function timewise(dir = "./", organize = "yyy/mm") {
     const now = new Date();
     const root = path.resolve(dir);
     console.log(`Timewising in ${root}`);
@@ -32,7 +32,11 @@ export async function timewise(dir = "./") {
             const { mtime, ctime } = stats;
             const createTime = mtime < ctime ? mtime : ctime;
 
-            const folder = `${createTime.getFullYear()}/${(createTime.getMonth() + 1).toString(10).padStart(2, '0')}`;
+			const folder = organize.replace(/(\/|^)yyy(\/|$)/, `/${createTime.getFullYear()}/`)
+				.replace(/(\/|^)mm(\/|$)/, `/${(createTime.getMonth() + 1).toString(10).padStart(2, '0')}/`)
+				.replace(/(\/|^)dd(\/|$)/, `/${createTime.getDate().toString(10).padStart(2, '0')}/`)
+				.replace(/^\/+/, "");
+
             drafts.set(fPath, path.resolve(root, folder, fName));
         } catch (err) {
             errors.set(fPath, `${err}`);
