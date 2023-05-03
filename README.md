@@ -1,10 +1,10 @@
 # timewise-photos
- Organize photos into year-month subfolders.
+Organize photos into timebased subfolders.
 
 ## Usage
 From CLI:
 ```bash
-timewise [-p "path/to/folder"]
+timewise [-p "path/to/folder"] [-o "[yyy][/mm][/dd]"]
 ```
 
 ## Install

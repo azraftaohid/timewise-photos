@@ -6,9 +6,9 @@ import { timewise } from ".";
 
 const args = yargs(hideBin(process.argv))
     .scriptName("timewise")
-    .usage("Usage: $0 [-p path/to/folder] [-o yyy|yyy/mm|yyy/mm/dd]")
-    .option("path", { alias: "p", type: "string", describe: "Path to the folder containing photos." })
-	.option("organize", { alias: "o", type: "string", describe: "Organize by yyy (year), mm (month), dd (day) scheme. Defaults to yyy/mm.", default: "yyy/mm" })
+    .usage("Usage: $0 [-p path/to/folder] [-o [yyy][/mm][/dd]]")
+    .option("path", { alias: "p", type: "string", describe: "Path to the folder containing photos" })
+	.option("organize", { alias: "o", type: "string", describe: "Organize scheme by yyy (year), mm (month), dd (day)", default: "yyy/mm" })
     .argv;
 
 (async function start() {

@@ -1,7 +1,7 @@
 {
   "name": "timewise-photos",
   "version": "1.0.1",
-  "description": "Organize photos into year-month subfolders.",
+  "description": "Organize photos into timebased subfolders.",
   "main": "build/index.js",
   "scripts": {
     "test": "yarn build && node build/cli.js -p \"src/__test__/res\"",
