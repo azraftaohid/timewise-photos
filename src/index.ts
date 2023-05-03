@@ -29,8 +29,8 @@ export async function timewise(dir = "./", organize = "yyy/mm") {
             const stats = await fs.lstat(fPath);
             if (!stats.isFile() || stats.isSymbolicLink()) continue;
 
-            const { mtime, ctime } = stats;
-            const createTime = mtime < ctime ? mtime : ctime;
+            const { mtimeMs, ctimeMs, birthtimeMs, atimeMs } = stats;
+            const createTime = new Date(Math.min(birthtimeMs, mtimeMs, ctimeMs, atimeMs));
 
 			const folder = organize.replace(/(\/|^)yyy(\/|$)/, `/${createTime.getFullYear()}/`)
 				.replace(/(\/|^)mm(\/|$)/, `/${(createTime.getMonth() + 1).toString(10).padStart(2, '0')}/`)
