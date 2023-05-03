@@ -33,5 +33,6 @@
     "timewise": "build/cli.js",
     "timewise-photos": "build/cli.js"
   },
-  "preferGlobal": true
+  "preferGlobal": true,
+  "packageManager": "yarn@3.4.1"
 }
