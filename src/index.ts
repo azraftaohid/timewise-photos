@@ -3,7 +3,7 @@ import fs from "fs/promises";
 import { nanoid } from "nanoid";
 import path from "path";
 
-export async function timewise(dir = "./", organize = "yyy/mm") {
+export async function timewise(dir = "./", organize = "yyy/mm", filters: Filters = {}) {
     const now = new Date();
     const root = path.resolve(dir);
     console.log(`Timewising in ${root}`);
@@ -22,12 +22,29 @@ export async function timewise(dir = "./", organize = "yyy/mm") {
 
     let success = 0;
 
+	let includeRegex: RegExp | undefined;
+	if (filters.includePattern) {
+		includeRegex = new RegExp(filters.includePattern);
+	}
+
+	let excludeRegex: RegExp | undefined;
+	if (filters.excludePattern) {
+		excludeRegex = new RegExp(filters.excludePattern);
+	}
+
     process.stdout.write(`Making draft...\r`);
     for (const fName of files) {
         const fPath = path.resolve(root, fName);
         try {
             const stats = await fs.lstat(fPath);
             if (!stats.isFile() || stats.isSymbolicLink()) continue;
+
+			if (includeRegex && !includeRegex.test(fName)) continue;
+			if (excludeRegex?.test(fName)) continue;
+			if (filters.minAge && stats.mtimeMs < new Date(filters.minAge).getTime()) continue;
+			if (filters.maxAge && stats.mtimeMs > new Date(filters.maxAge).getTime()) continue;
+			if (filters.minSize && stats.size < filters.minSize) continue;
+			if (filters.maxSize && stats.size > filters.maxSize) continue;
 
             const { mtimeMs, ctimeMs, birthtimeMs, atimeMs } = stats;
             const createTime = new Date(Math.min(birthtimeMs, mtimeMs, ctimeMs, atimeMs));
@@ -72,4 +89,13 @@ function makeProgressMessage(success: number, fail: number, total: number) {
     // next line is never shorter than previous line
     // only \r is fine to be used with stdout
     return `File moved ${success} out of ${total}${fail ? ` (${fail} failed)` : ""}\r`;
+}
+
+interface Filters {
+	maxAge?: string;
+	minAge?: string;
+	includePattern?: string;
+	excludePattern?: string;
+	maxSize?: number; // in bytes
+	minSize?: number; // in bytes
 }
